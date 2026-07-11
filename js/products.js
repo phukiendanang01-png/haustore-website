@@ -5,7 +5,7 @@ const PRODUCTS = [
  category: "phone",
  specs: "256GB | Màu Xám",
  price: 11750000,
- image: ""
+ image: "images/oppo-pad-1.jpg"
  },
  {
  id: 2,
