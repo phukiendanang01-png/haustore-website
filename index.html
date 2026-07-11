@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hậu Store - Điện Thoại & Phụ Kiện</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">Hậu Store</a>
+            <nav class="nav">
+                <a href="#products">Sản Phẩm</a>
+                <a href="#about">Về Chúng Tôi</a>
+                <a href="#contact">Liên Hệ</a>
+            </nav>
+            <button class="cart-btn" id="cartBtn">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Chào mừng đến với<br><span>Hậu Store</span></h1>
+            <p>Điện thoại & phụ kiện chính hãng, giá tốt nhất Đà Nẵng</p>
+            <a href="#products" class="btn-primary">Khám Phá Ngay</a>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Sản Phẩm Nổi Bật</h2>
+            <div class="product-filters">
+                <button class="filter-btn active" data-filter="all">Tất Cả</button>
+                <button class="filter-btn" data-filter="phone">Điện Thoại</button>
+                <button class="filter-btn" data-filter="accessory">Phụ Kiện</button>
+            </div>
+            <div class="product-grid" id="productGrid">
+                <!-- Products will be loaded by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">Về Hậu Store</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Hậu Store là cửa hàng điện thoại & phụ kiện uy tín tại Đà Nẵng. Chúng tôi cam kết:</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Sản phẩm chính hãng 100%</li>
+                        <li><i class="fas fa-check"></i> Giá cả cạnh tranh nhất thị trường</li>
+                        <li><i class="fas fa-check"></i> Bảo hành tận tâm, đổi máy không hoàn tiền</li>
+                        <li><i class="fas fa-check"></i> Hỗ trợ khách hàng 24/7</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Liên Hệ</h2>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Địa Chỉ</h3>
+                    <p>Đà Nẵng, Việt Nam</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <h3>Điện Thoại</h3>
+                    <p><a href="tel:0905123456">0905 123 456</a></p>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-facebook"></i>
+                    <h3>Facebook</h3>
+                    <p><a href="#">Hậu Store</a></p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <h3>Giờ Mở Cửa</h3>
+                    <p>8:00 - 21:00 (T2-CN)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Hậu Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Giỏ Hàng</h3>
+            <button class="cart-close" id="cartClose"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+                <i class="fas fa-shopping-bag"></i>
+                <p>Giỏ hàng trống</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Tổng cộng:</span>
+                <span id="cartTotal">0₫</span>
+            </div>
+            <button class="btn-primary btn-checkout" id="checkoutBtn">Đặt Mua</button>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal">
+            <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+            <h2>Đặt Mua</h2>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label>Họ và Tên *</label>
+                    <input type="text" name="name" required placeholder="Nguyễn Văn A">
+                </div>
+                <div class="form-group">
+                    <label>Số Điện Thoại *</label>
+                    <input type="tel" name="phone" required placeholder="0905 123 456">
+                </div>
+                <div class="form-group">
+                    <label>Địa Chỉ Giao Hàng *</label>
+                    <textarea name="address" required placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Ghi Chú</label>
+                    <textarea name="note" placeholder="Yêu cầu khác (nếu có)"></textarea>
+                </div>
+                <div class="order-summary">
+                    <h4>Đơn Hàng</h4>
+                    <div id="orderItems"></div>
+                    <div class="order-total">
+                        <span>Tổng cộng:</span>
+                        <span id="orderTotal">0₫</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary btn-submit">Xác Nhận Đặt Mua</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal modal-success">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Đặt Hàng Thành Công!</h2>
+            <p>Cảm ơn bạn đã mua hàng tại Hậu Store. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
+            <button class="btn-primary" id="successClose">Tiếp Tục Mua Sắm</button>
+        </div>
+    </div>
+
+    <script src="js/products.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
