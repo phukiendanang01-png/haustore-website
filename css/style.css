@@ -398,6 +398,24 @@ a {
     text-decoration: underline;
 }
 
+.btn-map {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white !important;
+    border-radius: 980px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: var(--transition);
+    text-decoration: none !important;
+}
+
+.btn-map:hover {
+    background: var(--primary-hover);
+    transform: scale(1.02);
+}
+
 /* ===== FOOTER ===== */
 .footer {
     padding: 24px 0;
