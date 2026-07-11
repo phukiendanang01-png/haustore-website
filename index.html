@@ -179,6 +179,37 @@
         </div>
     </div>
 
+    <!-- Product Detail Modal -->
+    <div class="modal-overlay" id="productDetailModal">
+        <div class="modal modal-detail">
+            <button class="modal-close" id="detailClose"><i class="fas fa-times"></i></button>
+            <div class="detail-content">
+                <div class="detail-gallery">
+                    <div class="detail-main-image">
+                        <img id="detailMainImage" src="" alt="">
+                    </div>
+                    <div class="detail-thumbnails" id="detailThumbnails">
+                        <!-- Thumbnails loaded by JS -->
+                    </div>
+                </div>
+                <div class="detail-info">
+                    <h2 id="detailName"></h2>
+                    <p class="detail-specs" id="detailSpecs"></p>
+                    <p class="detail-price" id="detailPrice"></p>
+                    <p class="detail-description" id="detailDescription"></p>
+                    <div class="detail-actions">
+                        <button class="btn-primary" id="detailAddCart">
+                            <i class="fas fa-plus"></i> Thêm vào giỏ
+                        </button>
+                        <button class="btn-buy-now" id="detailBuyNow">
+                            Mua ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/products.js"></script>
     <script src="js/telegram.js"></script>
     <script src="js/app.js"></script>
