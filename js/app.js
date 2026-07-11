@@ -197,7 +197,7 @@ function closeOrderModal() {
 }
 
 // ===== ORDER SUBMIT =====
-orderForm.addEventListener('submit', (e) => {
+orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const formData = new FormData(orderForm);
@@ -216,8 +216,11 @@ orderForm.addEventListener('submit', (e) => {
         date: new Date().toLocaleString('vi-VN')
     };
 
-    // Log order (in real app, send to server)
+    // Log order
     console.log('New Order:', order);
+    
+    // Gửi đơn hàng về Telegram
+    await sendOrderToTelegram(order);
     
     // Clear cart
     cart = [];
