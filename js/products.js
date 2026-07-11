@@ -13,7 +13,7 @@ const PRODUCTS = [
  category: "phone",
  specs: "64GB | Trắng",
  price: 3900000,
- image: ""
+ image: "images/iphone11-1.jpg"
  }
 ];
 
