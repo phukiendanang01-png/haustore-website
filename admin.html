@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hậu Store - Quản Lý Sản Phẩm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0071e3;
+            --primary-hover: #0077ed;
+            --text: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --bg: #fbfbfd;
+            --white: #ffffff;
+            --border: #d2d2d7;
+            --gray-light: #f5f5f7;
+            --success: #30d158;
+            --danger: #ff3b30;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 18px;
+        }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        .header span { color: var(--primary); }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 980px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 24px;
+            transition: all 0.2s;
+        }
+        .add-btn:hover { background: var(--primary-hover); transform: scale(1.02); }
+        .product-list { display: flex; flex-direction: column; gap: 16px; }
+        .product-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .product-thumb {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            background: var(--gray-light);
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .product-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-thumb i {
+            font-size: 2rem;
+            color: var(--border);
+        }
+        .product-thumb:hover::after {
+            content: '📷';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border-radius: 12px;
+        }
+        .product-form { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .form-row { display: flex; gap: 10px; }
+        .form-group { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .form-group label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        .form-group input, .form-group select {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,113,227,0.1);
+        }
+        .product-actions {
+            display: flex;
+            gap: 8px;
+            align-self: flex-start;
+        }
+        .btn-save {
+            padding: 8px 16px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 980px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-delete {
+            padding: 8px 16px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 980px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .export-section {
+            margin-top: 32px;
+            padding: 24px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        .export-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        .btn-export {
+            padding: 14px 32px;
+            background: var(--text);
+            color: white;
+            border: none;
+            border-radius: 980px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-export:hover { opacity: 0.8; }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--text);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .hidden { display: none; }
+        #fileInput { display: none; }
+        @media (max-width: 600px) {
+            .product-card { flex-direction: column; }
+            .product-thumb { width: 100%; height: 160px; }
+            .form-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📦 <span>Hậu Store</span> - Quản Lý Sản Phẩm</h1>
+    </div>
+
+    <div class="container">
+        <button class="add-btn" onclick="addProduct()">
+            <i class="fas fa-plus"></i> Thêm Sản Phẩm Mới
+        </button>
+
+        <div class="product-list" id="productList">
+            <!-- Products loaded here -->
+        </div>
+
+        <div class="export-section">
+            <p>Sau khi chỉnh sửa xong, nhấn nút bên dưới để xuất file products.js mới</p>
+            <button class="btn-export" onclick="exportProducts()">
+                <i class="fas fa-download"></i> Xuất File products.js
+            </button>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" accept="image/*" onchange="handleImageUpload(event)">
+    <div class="toast" id="toast"></div>
+
+    <script src="js/products.js"></script>
+    <script>
+        let currentThumbEl = null;
+        let currentProductId = null;
+        let products = JSON.parse(JSON.stringify(PRODUCTS));
+
+        // Load saved products from localStorage
+        const saved = localStorage.getItem('haustore_products');
+        if (saved) products = JSON.parse(saved);
+
+        function render() {
+            const list = document.getElementById('productList');
+            list.innerHTML = products.map(p => `
+                <div class="product-card" data-id="${p.id}">
+                    <div class="product-thumb" onclick="uploadImage(${p.id}, this)">
+                        ${p.image ? `<img src="${p.image}" onerror="this.parentElement.innerHTML='<i class=&quot;fas fa-image&quot;></i>'">` : '<i class="fas fa-image"></i>'}
+                    </div>
+                    <div class="product-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tên Sản Phẩm</label>
+                                <input type="text" value="${p.name}" onchange="updateField(${p.id}, 'name', this.value)">
+                            </div>
+                            <div class="form-group" style="max-width:140px">
+                                <label>Loại</label>
+                                <select onchange="updateField(${p.id}, 'category', this.value)">
+                                    <option value="phone" ${p.category==='phone'?'selected':''}>Điện Thoại</option>
+                                    <option value="accessory" ${p.category==='accessory'?'selected':''}>Phụ Kiện</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Mô Tả / Thông Số</label>
+                                <input type="text" value="${p.specs}" onchange="updateField(${p.id}, 'specs', this.value)">
+                            </div>
+                            <div class="form-group" style="max-width:180px">
+                                <label>Giá (₫)</label>
+                                <input type="number" value="${p.price}" onchange="updateField(${p.id}, 'price', Number(this.value))">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Link Ảnh (hoặc click ảnh để upload)</label>
+                                <input type="text" value="${p.image || ''}" onchange="updateField(${p.id}, 'image', this.value)" placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-save" onclick="saveProduct(${p.id})"><i class="fas fa-check"></i></button>
+                        <button class="btn-delete" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateField(id, field, value) {
+            const p = products.find(x => x.id === id);
+            if (p) p[field] = value;
+        }
+
+        function saveProduct(id) {
+            localStorage.setItem('haustore_products', JSON.stringify(products));
+            showToast('✅ Đã lưu!');
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('Xóa sản phẩm này?')) return;
+            products = products.filter(x => x.id !== id);
+            localStorage.setItem('haustore_products', JSON.stringify(products));
+            render();
+            showToast('🗑️ Đã xóa!');
+        }
+
+        function addProduct() {
+            const newId = products.length > 0 ? Math.max(...products.map(x => x.id)) + 1 : 1;
+            products.push({
+                id: newId,
+                name: 'Sản Phẩm Mới',
+                category: 'phone',
+                specs: 'Mô tả sản phẩm',
+                price: 0,
+                image: ''
+            });
+            localStorage.setItem('haustore_products', JSON.stringify(products));
+            render();
+            showToast('➕ Đã thêm sản phẩm mới!');
+            // Scroll to new product
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.product-card');
+                cards[cards.length - 1].scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        function uploadImage(id, thumbEl) {
+            currentProductId = id;
+            currentThumbEl = thumbEl;
+            document.getElementById('fileInput').click();
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                const p = products.find(x => x.id === currentProductId);
+                if (p) {
+                    p.image = base64;
+                    if (currentThumbEl) {
+                        currentThumbEl.innerHTML = `<img src="${base64}">`;
+                    }
+                    localStorage.setItem('haustore_products', JSON.stringify(products));
+                    showToast('🖼️ Đã cập nhật ảnh!');
+                }
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function exportProducts() {
+            let output = 'const PRODUCTS = [\n';
+            products.forEach((p, i) => {
+                const img = p.image && p.image.startsWith('data:') 
+                    ? '(ảnh đã upload - cần thay bằng link)' 
+                    : p.image;
+                output += `    {
+        id: ${p.id},
+        name: "${p.name}",
+        category: "${p.category}",
+        specs: "${p.specs}",
+        price: ${p.price},
+        image: "${img}"
+    }${i < products.length - 1 ? ',' : ''}\n`;
+            });
+            output += '];\n\nfunction formatPrice(price) {\n    return new Intl.NumberFormat("vi-VN").format(price) + "₫";\n}\n';
+
+            const blob = new Blob([output], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'products.js';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('📥 Đã xuất file products.js!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>
