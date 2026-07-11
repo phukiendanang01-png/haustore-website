@@ -18,6 +18,18 @@ const productGrid = document.getElementById('productGrid');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const menuToggle = document.getElementById('menuToggle');
 const nav = document.querySelector('.nav');
+// Product Detail Modal
+const productDetailModal = document.getElementById('productDetailModal');
+const detailClose = document.getElementById('detailClose');
+const detailMainImage = document.getElementById('detailMainImage');
+const detailThumbnails = document.getElementById('detailThumbnails');
+const detailName = document.getElementById('detailName');
+const detailSpecs = document.getElementById('detailSpecs');
+const detailPrice = document.getElementById('detailPrice');
+const detailDescription = document.getElementById('detailDescription');
+const detailAddCart = document.getElementById('detailAddCart');
+const detailBuyNow = document.getElementById('detailBuyNow');
+let currentDetailProduct = null;
 
 // ===== CART STATE =====
 let cart = JSON.parse(localStorage.getItem('haustore_cart') || '[]');
@@ -37,12 +49,12 @@ function renderProducts(filter) {
 
     productGrid.innerHTML = filtered.map(product => `
         <div class="product-card" data-id="${product.id}">
-            <div class="product-image">
+            <div class="product-image" onclick="openProductDetail(${product.id})" style="cursor:pointer">
                 <img src="${product.image}" alt="${product.name}" loading="lazy" 
                      onerror="this.parentElement.innerHTML='<i class=&quot;fas fa-mobile-alt placeholder-img&quot;></i>'">
             </div>
             <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
+                <h3 class="product-name" onclick="openProductDetail(${product.id})" style="cursor:pointer">${product.name}</h3>
                 <p class="product-specs">${product.specs}</p>
                 <p class="product-price">${formatPrice(product.price)}</p>
                 <div class="product-actions">
@@ -235,6 +247,47 @@ orderForm.addEventListener('submit', async (e) => {
     orderForm.reset();
 });
 
+// ===== PRODUCT DETAIL MODAL =====
+function openProductDetail(productId) {
+    const product = PRODUCTS.find(p => p.id === productId);
+    if (!product) return;
+    
+    currentDetailProduct = product;
+    
+    // Set main image
+    detailMainImage.src = product.image;
+    detailMainImage.alt = product.name;
+    
+    // Set thumbnails
+    const images = product.images || [product.image];
+    detailThumbnails.innerHTML = images.map((img, idx) => `
+        <img src="${img}" alt="${product.name} ${idx + 1}" 
+             class="${idx === 0 ? 'active' : ''}"
+             onclick="changeDetailImage('${img}', this)">
+    `).join('');
+    
+    // Set info
+    detailName.textContent = product.name;
+    detailSpecs.textContent = product.specs;
+    detailPrice.textContent = formatPrice(product.price);
+    detailDescription.textContent = product.description || 'Chưa có mô tả chi tiết.';
+    
+    // Show modal
+    productDetailModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProductDetail() {
+    productDetailModal.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function changeDetailImage(src, thumbEl) {
+    detailMainImage.src = src;
+    detailThumbnails.querySelectorAll('img').forEach(img => img.classList.remove('active'));
+    thumbEl.classList.add('active');
+}
+
 // ===== EVENT LISTENERS =====
 function setupEventListeners() {
     // Cart toggle
@@ -257,6 +310,28 @@ function setupEventListeners() {
         document.body.style.overflow = '';
     });
     
+    // Product detail modal
+    detailClose.addEventListener('click', closeProductDetail);
+    productDetailModal.addEventListener('click', (e) => {
+        if (e.target === productDetailModal) closeProductDetail();
+    });
+    
+    // Detail add to cart
+    detailAddCart.addEventListener('click', () => {
+        if (currentDetailProduct) {
+            addToCart(currentDetailProduct.id);
+            closeProductDetail();
+        }
+    });
+    
+    // Detail buy now
+    detailBuyNow.addEventListener('click', () => {
+        if (currentDetailProduct) {
+            buyNow(currentDetailProduct.id);
+            closeProductDetail();
+        }
+    });
+    
     // Mobile menu
     menuToggle.addEventListener('click', () => {
         nav.classList.toggle('open');
@@ -274,6 +349,7 @@ function setupEventListeners() {
         if (e.key === 'Escape') {
             hideCart();
             closeOrderModal();
+            closeProductDetail();
             successModal.classList.remove('open');
             document.body.style.overflow = '';
         }
